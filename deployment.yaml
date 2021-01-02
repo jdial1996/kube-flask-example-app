@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+metadata:
+    name: basic-flask-app-deployment
+    labels: 
+        app: demo-deployment
+kind: Deployment
+spec:
+    replicas: 2
+    selector:
+        matchLabels:
+            app: flask
+    template:
+        metadata:
+            labels:
+                app: flask
+        spec:
+            containers:
+                - name: flask-k8s-demo
+                  image: jdial1996/basic-flask-app:v1
+                  ports:
+                    - containerPort: 5000
+                  imagePullPolicy: IfNotPresent 
+
+---
+
+apiVersion: v1
+kind: Service
+metadata: 
+    name: basic-flask-app-service
+spec:
+    selector:
+        app: flask
+    type: LoadBalancer
+    ports:
+        - protocol: "TCP"
+          port: 6000
+          targetPort: 5000
