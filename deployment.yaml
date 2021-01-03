@@ -20,6 +20,21 @@ spec:
                   ports:
                     - containerPort: 5000
                   imagePullPolicy: IfNotPresent 
+                  livenessProbe:
+                    httpGet:
+                        path: /
+                        port: 5000
+                    initialDelaySeconds: 30
+                    periodSeconds: 30
+                    # Liveness probe: if http request fails pod is deemed unhealthy
+                  readinessProbe:  
+                #    check port 5000 every 3 seconds after an initial delay of 15 seconds
+                    httpGet:
+                        path: /
+                        port: 5000
+                    initialDelaySeconds: 15
+                    periodSeconds: 3
+                    # once the readiness probe succeeds kubernetes will know that the pod is ready for business (will then go to the liveness probe)
 
 ---
 
